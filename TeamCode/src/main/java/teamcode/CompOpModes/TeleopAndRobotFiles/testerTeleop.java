@@ -72,7 +72,7 @@ public class testerTeleop extends LinearOpMode {
         // Scan servo till stop pressed.
         while(opModeIsActive()){
 
-            double position = robot.middleDeadWheelServo.getPosition();
+            double position = robot.linkageServo.getPosition();
 
             if (gamepad1.left_bumper) {
                 position += 0.001;
@@ -80,19 +80,19 @@ public class testerTeleop extends LinearOpMode {
                 position -= 0.001;
             }
 
-            robot.middleDeadWheelServo.setPosition(Range.clip(position, 0, 0.99));
-            telemetry.addData("Servo Position", "%5.2f", robot.middleDeadWheelServo.getPosition());
+            robot.linkageServo.setPosition(Range.clip(position, 0, 0.99));
+            telemetry.addData("Servo Position", "%5.2f", robot.linkageServo.getPosition());
 
-//            double positionb = robot.capStone.getPosition();
-//
-//            if (gamepad1.a) {
-//                positionb += 0.001;
-//            } else if (gamepad1.b) {
-//                positionb -= 0.001;
-//            }
-//
-//            robot.capStone.setPosition(Range.clip(positionb, 0, 0.99));
-//            telemetry.addData("Servo Position", "%5.2f", robot.capStone.getPosition());
+            double positionb = robot.turnServo.getPosition();
+
+            if (gamepad1.a) {
+                positionb += 0.001;
+            } else if (gamepad1.b) {
+                positionb -= 0.001;
+            }
+
+            robot.turnServo.setPosition(Range.clip(positionb, 0, 0.99));
+            telemetry.addData("Servo Position", "%5.2f", robot.turnServo.getPosition());
 //
 //
 //            double positionc = robot.rightHook.getPosition();
@@ -106,6 +106,13 @@ public class testerTeleop extends LinearOpMode {
 //            robot.rightHook.setPosition(Range.clip(positionc, 0, 0.99));
 //            telemetry.addData("Servo Position", "%5.2f", robot.rightHook.getPosition());
 
+            if(gamepad1.x) {
+                robot.linkageServo.setPosition(robot.linkageMax);
+            }
+
+            if(gamepad1.y) {
+                robot.linkageServo.setPosition(robot.linkageCollapsed);
+            }
 
 
             telemetry.update();
