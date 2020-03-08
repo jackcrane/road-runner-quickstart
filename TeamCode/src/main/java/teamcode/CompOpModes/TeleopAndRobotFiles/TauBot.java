@@ -31,7 +31,6 @@ package teamcode.CompOpModes.TeleopAndRobotFiles;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -41,8 +40,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.openftc.revextensions2.ExpansionHubMotor;
-
-import teamcode.Vision.camera;
 //import org.firstinspires.ftc.teamcode.robot.mecanum.mechanisms.DoubleMotorLift;
 //import org.firstinspires.ftc.teamcode.robot.mecanum.mechanisms.SimpleLift;
 
@@ -79,10 +76,14 @@ public class TauBot
 
     public Servo leftHook       = null;
     public Servo rightHook      = null;
-    public Servo capStone       = null;
-    public Servo blockServo     = null;
+//    public Servo capStone       = null;
+//    public Servo blockServo     = null;
     public Servo middleDeadWheelServo = null;
-    public CRServo xSlide393      = null;
+//    public CRServo xSlide393      = null;
+    public Servo frontGrab = null;
+    public Servo backGrab = null;
+    public Servo turnServo = null;
+    public Servo linkageServo = null;
 
     public double   rightHookUp    = 0.37;
     public double   rightHookDown  = 0;
@@ -92,6 +93,23 @@ public class TauBot
     public double   stoneGrab = 0.49;
     public double   stoneUp = 0;
     public double   stoneDispense = 0.35;
+
+    public double frontGrabClosed = 0.21;
+    public double frontGrabOpen = 0.8;
+    public double frontGrabCap = 0.95;
+    public double frontGrabDown = 0.27;
+
+    public double backGrabClosed = 0.33;
+    public double backGrabOpen = 0.92;
+
+
+    public double linkageCollapsed = 0.27;
+    public double linkage1Block = 0.72;
+    public double linkageMax = 0.81;
+
+    public double turnTableStraight = .07;
+    public double turnTableNinety = .59;
+
 
     public Rev2mDistanceSensor liftDistanceSensor;
     double capStoneHold = 0.2;
@@ -129,12 +147,16 @@ public class TauBot
         leftFront = hwMap.get(DcMotor.class, "leftFront");
         rightBack  = hwMap.get(DcMotor.class, "rightBack");
         rightFront = hwMap.get(DcMotor.class, "rightFront");
+
         leftIntake = hwMap.get(ExpansionHubMotor.class, "leftIntake");
         rightIntake = hwMap.get(ExpansionHubMotor.class, "rightIntake");
+
         leftLift = hwMap.get(DcMotorEx.class, "leftLift");
         rightLift = hwMap.get(DcMotorEx.class, "rightLift");
+
         liftBeam = hwMap.get(DigitalChannel.class, "liftBeam");
         blockBeam = hwMap.get(DigitalChannel.class, "blockBeam");
+
         rightBack.setDirection(DcMotor.Direction.REVERSE);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         rightIntake.setDirection(DcMotor.Direction.REVERSE);
@@ -168,6 +190,7 @@ public class TauBot
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -175,19 +198,22 @@ public class TauBot
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         leftLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         rightLift.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
 
         leftLift.setPower(0);
         rightLift.setPower(0);
-//        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        leftLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 
 //        leftLift.setTargetPosition(0);
-        rightLift.setTargetPosition(0);
+//        rightLift.setTargetPosition(0);
 //        leftLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        rightLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        rightLift.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        leftLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
 
 
@@ -195,18 +221,23 @@ public class TauBot
 
         leftHook = hwMap.get(Servo.class, "leftHook");
         rightHook = hwMap.get(Servo.class, "rightHook");
-        capStone = hwMap.get(Servo.class, "capStone");
-        blockServo = hwMap.get(Servo.class, "blockServo");
-        xSlide393 = hwMap.get(CRServo.class, "xSlide393");
-        xSlide393.setDirection(CRServo.Direction.REVERSE);
+//        capStone = hwMap.get(Servo.class, "capStone");
+//        blockServo = hwMap.get(Servo.class, "blockServo");
+//        xSlide393 = hwMap.get(CRServo.class, "xSlide393");
+//        xSlide393.setDirection(CRServo.Direction.REVERSE);
 
         leftHook.setPosition(leftHookUp);
         rightHook.setPosition(rightHookUp);
-        blockServo.setPosition(capStoneHold);
-        capStone.setPosition(.17);
+//        blockServo.setPosition(capStoneHold);
+//        capStone.setPosition(.17);
+
+        frontGrab = hwMap.get(Servo.class, "frontGripServo");
+        backGrab = hwMap.get(Servo.class, "backGripServo");
+        turnServo = hwMap.get(Servo.class, "turnServo");
+        linkageServo = hwMap.get(Servo.class, "linkageServo");
 
 //        leftLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
-        rightLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
+//        rightLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 
 
     }
@@ -281,16 +312,21 @@ public class TauBot
 
         leftHook = hwMap.get(Servo.class, "leftHook");
         rightHook = hwMap.get(Servo.class, "rightHook");
-        capStone = hwMap.get(Servo.class, "capStone");
-        blockServo = hwMap.get(Servo.class, "blockServo");
+//        capStone = hwMap.get(Servo.class, "capStone");
+//        blockServo = hwMap.get(Servo.class, "blockServo");
         middleDeadWheelServo = hwMap.get(Servo.class, "middleDeadWheelServo");
-        xSlide393 = hwMap.get(CRServo.class, "xSlide393");
-        xSlide393.setDirection(CRServo.Direction.REVERSE);
+//        xSlide393 = hwMap.get(CRServo.class, "xSlide393");
+//        xSlide393.setDirection(CRServo.Direction.REVERSE);
 
         leftHook.setPosition(leftHookUp);
         rightHook.setPosition(rightHookUp);
-        blockServo.setPosition(stoneUp);
+//        blockServo.setPosition(stoneUp);
         middleDeadWheelServo.setPosition(middleDeadWheelServoPosition);
+
+        frontGrab = hwMap.get(Servo.class, "frontGripServo");
+        backGrab = hwMap.get(Servo.class, "backGripServo");
+        turnServo = hwMap.get(Servo.class, "turnServo");
+        linkageServo = hwMap.get(Servo.class, "linkageServo");
 
 //        leftLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 //        rightLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
