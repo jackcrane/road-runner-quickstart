@@ -34,13 +34,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import teamcode.CompOpModes.TeleopAndRobotFiles.TauBot;
+
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0.5);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0.3);
 
 
     public enum Mode {
@@ -67,8 +69,12 @@ public class SampleMecanumDrive extends MecanumDrive {
     private List<DcMotorEx> motors;
     private BNO055IMU imu;
 
+    private TauBot bot;
+
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(DriveConstants.kV, DriveConstants.kA, DriveConstants.kStatic, DriveConstants.TRACK_WIDTH);
+
+        bot = new TauBot();
 
         dashboard = FtcDashboard.getInstance();
         dashboard.setTelemetryTransmissionInterval(25);
@@ -132,7 +138,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
         // TODO: if desired, use setLocalizer() to change the localization method
         // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
-        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+//        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+        setLocalizer(new TwoWheelLocalizer(hardwareMap, this));
+
+        bot.initAuto(hardwareMap);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
