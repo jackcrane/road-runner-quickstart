@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import teamcode.roadrunner.hardware.SampleMecanumDrive;
+import teamcode.roadrunner.hardware.StandardTrackingWheelLocalizer;
 
 
 /*
@@ -16,7 +17,7 @@ import teamcode.roadrunner.hardware.SampleMecanumDrive;
 @Config
 @Autonomous(group = "drive")
 public class FollowerPIDTuner extends LinearOpMode {
-    public static double DISTANCE = 48;
+    public static double DISTANCE = 36;
 
     @Override
     public void runOpMode() throws InterruptedException {
