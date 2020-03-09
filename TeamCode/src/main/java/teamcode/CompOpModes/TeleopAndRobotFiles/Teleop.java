@@ -565,12 +565,12 @@ public class Teleop extends LinearOpMode {
 
     public void intake(String direction, double speed) {
         if (direction == "in") {
-            robot.leftIntake.setPower(speed);
+            robot.leftIntake.setPower(-speed);
             robot.rightIntake.setPower(-speed);
         }
         if (direction == "out") {
-            robot.leftIntake.setPower(speed * -1);
-            robot.rightIntake.setPower(-speed * -1);
+            robot.leftIntake.setPower(speed * 1);
+            robot.rightIntake.setPower(speed * 1);
         }
         if (direction == "off") {
             robot.leftIntake.setPower(0);
@@ -635,7 +635,7 @@ public class Teleop extends LinearOpMode {
     public void extendLifts(int cycleCounter) {
         //vexMotorPower = Math.abs(vexMotorPower);
         //vexServoTime.reset();
-        robot.linkageServo.setPosition(robot.linkageMax);
+        robot.linkageServo.setPosition(robot.linkage1Block);
         raiseLiftCycle(cycleCounter);
     }
 
