@@ -103,12 +103,15 @@ public class TauBot
     public double backGrabOpen = 0.92;
 
 
-    public double linkageCollapsed = 0.27;
-    public double linkage1Block = 0.72;
-    public double linkageMax = 0.81;
+    public double linkageCollapsed = 0.21;
+    public double linkage1Block = 0.54;
+    public double linkageMax = 0.59;
 
     public double turnTableStraight = .07;
     public double turnTableNinety = .59;
+
+    double   middleDeadWheelServoPositionUp = 0.25;
+    double   middleDeadWheelServoPositionDown = 0.34;
 
 
     public Rev2mDistanceSensor liftDistanceSensor;
@@ -239,6 +242,9 @@ public class TauBot
 //        leftLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 //        rightLift.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, newPIDF);
 
+        middleDeadWheelServo = hwMap.get(Servo.class, "middleDeadWheelServo");
+        middleDeadWheelServo.setPosition(middleDeadWheelServoPositionUp);
+
 
     }
     /* Initialize standard Hardware interfaces */
@@ -249,7 +255,6 @@ public class TauBot
         double   stoneGrab = 0.49;
         double   stoneUp = 0;
         double   stoneDispense = 0.35;
-        double   middleDeadWheelServoPosition = 0;
 
 //        PIDFCoefficients newPIDF = new PIDFCoefficients(10.0,  3.0,   0.0,  12.0);
 
@@ -321,7 +326,7 @@ public class TauBot
         leftHook.setPosition(leftHookUp);
         rightHook.setPosition(rightHookUp);
 //        blockServo.setPosition(stoneUp);
-        middleDeadWheelServo.setPosition(middleDeadWheelServoPosition);
+        middleDeadWheelServo.setPosition(middleDeadWheelServoPositionDown);
 
         frontGrab = hwMap.get(Servo.class, "frontGripServo");
         backGrab = hwMap.get(Servo.class, "backGripServo");
