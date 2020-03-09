@@ -40,7 +40,7 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
 //    public static double FORWARD_OFFSET = -12; // in; offset of the lateral wheel
 //    public static double MIDDLE_X_OFFSET = (1/8); // in; offset of the lateral wheel
 //    public static double MIDDLE_Y_OFFSET = -12; // in; offset of the lateral wheel
-     public static double MIDDLE_X_OFFSET = -12.07211091553415 / 2; // in; offset of the lateral wheel
+     public static double MIDDLE_X_OFFSET = -6; // in; offset of the lateral wheel
     public static double MIDDLE_Y_OFFSET = 0; // in; offset of the lateral wheel
 
     private DcMotor leftEncoder, rightEncoder, middleEncoder;
